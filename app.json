@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "blood-bank-app",
-    "slug": "blood-bank-app",
+    "name": "campus-app",
+    "slug": "campus-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -20,13 +20,11 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.aashir.campus",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     }
   }
 }

@@ -5,14 +5,21 @@ const INITIAL_STATES = {
     isLoggedIn: false,
     loader: false,
     email : '',
+    uri:'',
     uid : '',
     auth: false,
     contact:'',
     address:'',
     age:"",
-    bloodType:'',
+    Category:'',
     userType:'',
-    alldonors:[]
+    company_name:'',
+    timing:'',
+    salary:'',
+    city:'',
+    exp:'',
+    allstudents:[],
+    allcompanies:[]
     
 }
 
@@ -25,11 +32,16 @@ export default function (state = INITIAL_STATES, action) {
                 ...state,
                 isLoading: !state.isLoading
             })
-        case "LIST_DONORS":
+        case "LIST_STUDENTS":
             return ({
                 ...state,
-                alldonors: action.payload
+                allstudents: action.payload
             })
+        case "LIST_COMPANIES":
+        return ({
+            ...state,
+            allcompanies: action.payload
+        })
         case "LOGGEDIN_USER":
             console.log(action.payload)
             return ({
@@ -39,7 +51,7 @@ export default function (state = INITIAL_STATES, action) {
                 uid: action.payload.uid,
                contact: action.payload.contact,
               address: action.payload.address,
-               bloodType: action.payload.bloodType,
+               Category: action.payload.Category,
                 age:action.payload.age,
                 isLoggedIn : true,
             })

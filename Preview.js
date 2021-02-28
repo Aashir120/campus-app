@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, View, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-
+import {connect} from 'react-redux'
 
 
 class Preview extends React.Component {
@@ -18,7 +18,7 @@ class Preview extends React.Component {
              size={50}
              /></TouchableOpacity>
 
-            <TouchableOpacity onPress={()=>{this.props.sendUri;this.props.navigation.navigate('BeDonor'); }}>
+            <TouchableOpacity onPress={()=>{this.props.sendUri;this.props.navigation.navigate('BeMember'); }}>
              <AntDesign
              name='checkcircle'
              size={50}
@@ -32,4 +32,21 @@ class Preview extends React.Component {
   }
 }
 
-export default Preview;
+
+function mapDispatchToProps(dispatch){
+  return({
+    sendUri : (uri)=>{
+     console.log("hih")
+      dispatch({type:'URI', payload:uri})
+    },
+    cancel : ()=>{
+         dispatch({type:'URI', payload:''})
+       }
+  })
+}
+function mapStateToProps(state){
+  return({
+    imageUri : state.basicInfo.uri
+  })
+}
+export default connect (mapStateToProps,mapDispatchToProps)(Preview)

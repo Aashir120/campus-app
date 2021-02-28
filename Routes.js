@@ -1,13 +1,12 @@
 import React from 'react';
-import { createStackNavigator, createAppContainer, createSwitchNavigator } from "react-navigation";
+import { createAppContainer, createSwitchNavigator } from "react-navigation";
+import {createStackNavigator} from 'react-navigation-stack';
 import HomeScreen from './containers/HomeScreen/Home'
 import AuthScreen from './containers/AuthScreen/index'
-import ViewDonor from './ViewDonors'
-import BeDonor from './BeDonor'
+import ViewPresent from './ViewData'
+import BeMember from './BeMember'
 import CameraExample from './Camera'
 import Preview from './Preview'
-import Search from './Search'
-
 
 const Authnavigator = createStackNavigator({
     AuthScreen: {
@@ -30,22 +29,16 @@ const AppNavigator = createStackNavigator({
             title: 'Dashboard',
           }
     },
-    ViewDonor: {
-        screen: ViewDonor,
+    ViewPresent: {
+        screen: ViewPresent,
         navigationOptions: {
-            title: 'All Donors',
+            title: 'All Members',
           }
     },
-    Search: {
-        screen: Search,
+    BeMember: {
+        screen: BeMember,
         navigationOptions: {
-            title: 'Search',
-          }
-    },
-    BeDonor: {
-        screen: BeDonor,
-        navigationOptions: {
-            title: 'Be a Donor',
+            title: 'Campus Recruitment System',
           }
     },
     CameraExample: {

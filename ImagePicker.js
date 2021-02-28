@@ -21,24 +21,24 @@ class ImagePickerExample extends React.Component {
           name="images"
           size={50}
           color='white'
-          onPress={this.pickImageGallery}
+          onPress={this._pickImage}
         /></View>);
   }
 
   componentDidMount() {
-    getPermissionAsync = async () => {
-      if (Constants.platform.ios) {
-        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
-        }
+    this.getPermissionAsync();
+  }
+
+  getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
       }
     }
   }
 
-
-
-  pickImageGallery = async () => {
+  _pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -54,6 +54,8 @@ class ImagePickerExample extends React.Component {
     }
   };
 }
+ {/* {image &&
+          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />} */}
 function mapispatchToProps(dispatch){
   return({
     sendUri : (uri)=>{

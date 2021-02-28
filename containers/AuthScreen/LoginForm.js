@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { StyleSheet } from 'react-native'
 import { Text, View } from 'react-native-animatable'
-
+import metrics from '../../config/metrics'
 import CustomButton from '../../components/CustomButton'
 import CustomTextInput from '../../components/CustomTextInput'
 import {connect} from 'react-redux'

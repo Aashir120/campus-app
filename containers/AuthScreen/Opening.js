@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { StyleSheet } from 'react-native'
 import { Text, View } from 'react-native-animatable'
-
+import metrics from '../../config/metrics'
 import CustomButton from '../../components/CustomButton'
 
-export default class onBoard extends Component {
+export default class Opening extends Component {
   static propTypes = {
     onCreateAccountPress: PropTypes.func.isRequired,
     onSignInPress: PropTypes.func.isRequired
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8
   },
   signInButton: {
-    backgroundColor: '#C80000'
+    backgroundColor: 'blue'
   },
   signInButtonText: {
     color: 'white'
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     right: 0,
     color:'#fff',
     bottom: 0,
-    backgroundColor:'#C80000'
+    backgroundColor:'blue'
   },
   footerText:{
     color:'#fff',

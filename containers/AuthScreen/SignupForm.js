@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import { StyleSheet } from 'react-native'
+import { StyleSheet,Picker } from 'react-native'
 import { Text, View } from 'react-native-animatable'
-
+import metrics from '../../config/metrics'
 import CustomButton from '../../components/CustomButton'
 import CustomTextInput from '../../components/CustomTextInput'
-import metrics from '../../config/metrics'
 import { connect } from 'react-redux';
 
 class SignupForm extends Component {
@@ -19,12 +18,23 @@ class SignupForm extends Component {
     email: '',
     password: '',
     fullName: '',
+    Category:'',
     
   }
+  hideForm = async () => {
+    if (this.buttonRef && this.formRef && this.linkRef) {
+      await Promise.all([
+        this.buttonRef.zoomOut(200),
+        this.formRef.fadeOut(300),
+        this.linkRef.fadeOut(300)
+      ])
+    }
+  }
+
   render () {
-    const { email, password, fullName } = this.state
+    const { email, password, fullName,Category } = this.state
     const { isLoading, onLoginLinkPress, onSignupPress,nav } = this.props
-    const isValid = email !== '' && password !== '' && fullName !== ''
+    const isValid = email !== '' && password !== '' && fullName !== '' && Category !== ''
     return (
       <View style={styles.container}>
         <View style={styles.form} ref={(ref) => this.formRef = ref}>
@@ -62,12 +72,25 @@ class SignupForm extends Component {
             onChangeText={(value) => this.setState({ password: value })}
             isEnabled={!isLoading}
           />
+          <View style = {{marginBottom:20,flexDirection:'row'}}>
+          <Text style= {styles.signUpText}>Category:</Text>
+        <Picker
+          selectedValue={this.state.Category}
+          style={{height: 40, width: 150, color:'black'}}
+          color='black'
+          prompt='Category'
+          onValueChange={(itemValue, itemIndex) =>
+                this.setState({Category: itemValue})
+          }>
+            <Picker.Item label="User" value="User" />
+            <Picker.Item label="Company" value="Company" />
+          </Picker></View>
          
         </View>
         <View style={styles.footer}>
           <View ref={(ref) => this.buttonRef = ref} animation={'bounceIn'} duration={600} delay={400}>
             <CustomButton
-              onPress={() => onSignupPress(email,password,fullName,nav  )}
+              onPress={() => onSignupPress(email,password,fullName,Category,nav)}
               isEnabled={isValid}
               isLoading={isLoading}
               buttonStyle={styles.createAccountButton}
@@ -119,5 +142,8 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.6)',
     alignSelf: 'center',
     padding: 20
+  },
+  signUpText:{
+    color:'white'
   }
 })

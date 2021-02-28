@@ -4,10 +4,10 @@ import {ToastAndroid} from 'react-native';
 
 var firebaseConfig = {
     apiKey: "AIzaSyBwGPSZkKsJdKXuzVI2onNehfQ1MR736QM",
-    authDomain: "blood-bank-app-f6954.firebaseapp.com",
-    databaseURL: "https://blood-bank-app-f6954-default-rtdb.firebaseio.com",
-    projectId: "blood-bank-app-f6954",
-    storageBucket: "blood-bank-app-f6954.appspot.com",
+    authDomain: "campus-app-f6954.firebaseapp.com",
+    databaseURL: "https://campus-app-f6954-default-rtdb.firebaseio.com",
+    projectId: "campus-app-f6954",
+    storageBucket: "campus-app-f6954.appspot.com",
     messagingSenderId: "999992734339",
     appId: "1:999992734339:web:9226f4e27bc398916221b6"
   };
@@ -15,25 +15,28 @@ firebase.initializeApp(firebaseConfig);
 
 var db = firebase.firestore();
 
-export function signup(email,password,fullname,nav) {
+export function signup(email,password,fullname,Category,nav) {
     return (dispatch) => {
-        console.log(email, password);
         dispatch({ type: 'CHANGE_LOADING_STATE' })
+        console.log("cccccccccccc")
+        console.log(email, password,Category,nav);
         firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((user) => {
             console.log(user);
                 
                 db.collection("users").add({
-                    email,password,fullname,
+                    email,password,fullname,Category,
                     uid : user.user.uid,
                 }).then(function (docRef) {
-                    dispatch({ type: 'LOGGEDIN_USER', payload: { email,password,fullname}})
+                    dispatch({ type: 'LOGGEDIN_USER', payload: { email,password,fullname,Category}})
                     dispatch({ type: 'CHANGE_LOADING_STATE' });
-                    dispatch(getdonors())
-                    nav.navigate('App')
+                    dispatch(getstudents())
+                    dispatch(getcompanies())
+                    location.reload()
                 })
+                
             })
-            .catch(error=>{
+            .catch(error=>{ 
                 alert(error);
                 dispatch({ type: 'CHANGE_LOADING_STATE' });
             })
@@ -55,10 +58,11 @@ export function signin(email, password,nav) {
             .get()
             .then(function (userSnapshot) {
                             userSnapshot.forEach(function (userDoc) {
-                                var  { email,password,fullname} = userDoc.data()
-                                dispatch({ type: 'LOGGEDIN_USER', payload: { email,password,fullname}});
+                                var  { email,password,fullname,Category} = userDoc.data()
+                                dispatch({ type: 'LOGGEDIN_USER', payload: { email,password,fullname,Category}});
                                 dispatch({ type: 'CHANGE_LOADING_STATE' });
-                                dispatch(getdonors())
+                                dispatch(getstudents())
+                                dispatch(getcompanies())
                                 nav.navigate('App')
                                 
                             });
@@ -68,32 +72,50 @@ export function signin(email, password,nav) {
                 alert(error);
                 dispatch({ type: 'CHANGE_LOADING_STATE' });
             })
+        
     }
 }
 
 
-
-
-var alldonors =[]
-function getdonors(){
+var allstudents =[]
+function getstudents(){
 return(dispatch) =>{
  
     
-   firebase.firestore().collection("Donors").get().then(snapshot => {
+   firebase.firestore().collection("Students").get().then(snapshot => {
        snapshot.docs.forEach(doc => {
         
          const comment = doc.data()
-         alldonors.push(comment)
+         allstudents.push(comment)
         })
         
-        dispatch({type:'LIST_DONORS' , payload:alldonors})
-        alldonors =[]
+        dispatch({type:'LIST_STUDENTS' , payload:allstudents})
+        allstudents =[]
     })
-    console.log("all",alldonors)
+    console.log("all",allstudents)
    console.log("dispatched")
 }
 }
- export function addpic(fullName , contact , address,age,bloodType,uri,nav){
+var allcompanies =[]
+function getcompanies(){
+return(dispatch) =>{
+ 
+    
+   firebase.firestore().collection("Companies").get().then(snapshot => {
+       snapshot.docs.forEach(doc => {
+        
+         const comment = doc.data()
+         allcompanies.push(comment)
+        })
+        
+        dispatch({type:'LIST_COMPANIES' , payload:allcompanies})
+        allcompanies =[]
+    })
+    console.log("all",allcompanies)
+   console.log("dispatched")
+}
+}
+ export function addpic(fullName , contact , address,age,Department,uri,nav){
 
             return async (dispatch)=>    { 
                 dispatch({ type: 'CHANGE_LOADING_STATE' });
@@ -119,19 +141,19 @@ return(dispatch) =>{
                    console.log('File available at', downloadURL);
                    
                   
-                         firebase.firestore().collection("Donors").add({
+                         firebase.firestore().collection("Students").add({
                              fullName,
-                             contact , address,age,bloodType,
+                             contact , address,age,Department,
                              url:downloadURL,
                              
                              
                          }).then(function (docRef) {
                              dispatch({ type: 'CHANGE_LOADING_STATE' });
                              
-                            ToastAndroid.show('Donor added', ToastAndroid.SHORT);
+                            ToastAndroid.show('Student added', ToastAndroid.SHORT);
                              
                              nav.navigate('Home')
-                             dispatch(getdonors());
+                             dispatch(getstudents());
                              dispatch({type:'URI', payload:''})
                             })
                             .catch((e)=>{
@@ -141,6 +163,57 @@ return(dispatch) =>{
                                 
                          })
                      })
+                     
               })}
              }
+export function addpic2(company_name , timing , salary,city,exp,uri,nav){
+
+return async (dispatch)=>    { 
+    dispatch({ type: 'CHANGE_LOADING_STATE' });
+    console.log("[[[")
+    console.log("uploadAsFile", uri)
+        const response = await fetch(uri);
+        const blob = await response.blob();
+    
+        var metadata = {
+        contentType: 'image/jpeg',
+        };
+    
+        let name = new Date().getTime() + "-media.jpg"
+        const stref = firebase
+        .storage()
+        .ref()
+        .child('assets/' + name)
+    
+        stref.put(blob, metadata)
+    .then(function(imageSnapshot) {
+        imageSnapshot.ref.getDownloadURL()
+        .then((downloadURL)=>{
+        console.log('File available at', downloadURL);
+        
+        
+                firebase.firestore().collection("Companies").add({
+                    company_name,
+                    timing , salary,city,exp,
+                    url:downloadURL,
+                    
+                    
+                }).then(function (docRef) {
+                    dispatch({ type: 'CHANGE_LOADING_STATE' });
+                    
+                ToastAndroid.show('Company added', ToastAndroid.SHORT);
+                    
+                    nav.navigate('Home')
+                    dispatch(getcompanies());
+                    dispatch({type:'URI', payload:''})
+                })
+                .catch((e)=>{
+                    dispatch({type:'URI', payload:''})
+                    dispatch({ type: 'CHANGE_LOADING_STATE' });
+                    dispatch({type:'Error', payload:e})
+                    
+                })
+            })
+    })}
+    }
        
